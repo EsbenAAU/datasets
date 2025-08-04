@@ -1,4 +1,5 @@
 import os
+import sys
 import json
 import numpy as np
 from collections import defaultdict
@@ -48,10 +49,6 @@ def count_coco_categories(folder_path):
     result = dict(sorted(result.items(), key=lambda x: x[1], reverse=True))
 
     print("\n📊 Resultat:")
-    #for name, count in result.items():
-    #    print(f"{name}: {count}")
-
-
     names_array = np.array(list(result.keys()))
     count_array = np.array(list(result.values()))
 
@@ -60,11 +57,18 @@ def count_coco_categories(folder_path):
 
     print(names_string)
     print(count_string)
-    
+
     return result
 
 
-# Brug den præcise mappe
 if __name__ == "__main__":
-    folder = "/path/to/annotation/folder"
+    if len(sys.argv) != 2:
+        print("Brug: python extract.py <sti_til_mappe>")
+        sys.exit(1)
+
+    folder = sys.argv[1]
+    if not os.path.isdir(folder):
+        print(f"❌ Mappen findes ikke: {folder}")
+        sys.exit(1)
+
     count_coco_categories(folder)
